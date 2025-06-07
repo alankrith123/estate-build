@@ -1,10 +1,14 @@
 import React from 'react'
+import { useSearchParams } from 'react-router-dom'
 import "./Filter.scss"
 
 const Filter = () => {
+  const [searchParams] = useSearchParams();
+  const city = searchParams.get('city') || 'All Cities';
+  
   return (
     <div className="filter">
-      <h1>Search results for <b>London</b></h1>
+      <h1>Search results for <b>{city}</b></h1>
       <div className="top">
         <div className="item">
           <label htmlFor="city">Location</label>

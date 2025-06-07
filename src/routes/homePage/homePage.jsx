@@ -1,8 +1,16 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import "./homePage.scss"
 import SearchBar from '../../components/navbar/searchBar/SearchBar'
 
 const homePage = () => {
+  const navigate = useNavigate();
+
+  const handleImageClick = () => {
+    // Navigate to list page when bg.png is clicked
+    navigate('/list');
+  };
+
   return (
     <div className="homePage">
         <div className="textContainer">
@@ -28,7 +36,12 @@ const homePage = () => {
         </div>
         
         <div className="imgContainer">
-            <img src="/bg.png" alt="" />
+            <img 
+              src="/bg.png" 
+              alt="" 
+              onClick={handleImageClick}
+              style={{ cursor: 'pointer' }}
+            />
         </div>
     </div>
   )

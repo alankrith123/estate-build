@@ -1,8 +1,10 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import "./SearchBar.scss"
 
 const types = ["buy", "rent"];
 const SearchBar = () => {
+  const navigate = useNavigate();
   const[query, setQuery] = React.useState({
     type: "buy",
     location: "",
@@ -17,6 +19,24 @@ const SearchBar = () => {
     }));
   };
 
+  const handleInputChange = (e) => {
+    setQuery((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value
+    }));
+  };
+
+  const handleSearch = (e) => {
+    e.preventDefault();
+    const searchParams = new URLSearchParams();
+    if (query.location) searchParams.set('city', query.location);
+    if (query.minPrice > 0) searchParams.set('minPrice', query.minPrice);
+    if (query.maxPrice < 1000000) searchParams.set('maxPrice', query.maxPrice);
+    if (query.type) searchParams.set('type', query.type);
+    
+    navigate(`/list?${searchParams.toString()}`);
+  };
+
   return (
     <div className="searchBar">
       <div className="type">
@@ -29,20 +49,33 @@ const SearchBar = () => {
         {type}
       </button>
     ))}
-      </div>
-      <form>
-        <input type="text" name="location" placeholder="City Location" />
+      </div>      <form onSubmit={handleSearch}>
         <input 
-        type="number" 
-        name="minPrice" 
-        min={0} max={1000000} 
-        placeholder="Min Price" />
+          type="text" 
+          name="location" 
+          placeholder="City Location" 
+          value={query.location}
+          onChange={handleInputChange}
+        />
         <input 
-        type="number"
-         name="maxPrice" 
-         min={0} max={1000000} 
-         placeholder="Max Price" />
-         <button>
+          type="number" 
+          name="minPrice" 
+          min={0} 
+          max={1000000} 
+          placeholder="Min Price"
+          value={query.minPrice}
+          onChange={handleInputChange}
+        />
+        <input 
+          type="number"
+          name="maxPrice" 
+          min={0} 
+          max={1000000} 
+          placeholder="Max Price"
+          value={query.maxPrice}
+          onChange={handleInputChange}
+        />
+         <button type="submit">
           <img src="/search.png" alt="" />
          </button>
       </form>
